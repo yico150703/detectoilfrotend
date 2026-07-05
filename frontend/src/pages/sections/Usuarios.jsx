@@ -179,8 +179,8 @@ export default function Usuarios() {
       <p className="seccion-subtitulo">Administra los accesos de red y credenciales de los operadores del sistema</p>
 
       {/* Alertas de Mensaje */}
-      {success && <div style={{ color: '#a7f3d0', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.15)', padding: '12px 18px', borderRadius: 12, fontSize: '0.86rem', marginBottom: 20 }}>✅ {success}</div>}
-      {error && <div style={{ color: '#fca5a5', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.15)', padding: '12px 18px', borderRadius: 12, fontSize: '0.86rem', marginBottom: 20 }}>❌ {error}</div>}
+      {success && <div className="alert-box alert-success">✅ {success}</div>}
+      {error && <div className="alert-box alert-danger">❌ {error}</div>}
 
       <div className="row g-4">
         

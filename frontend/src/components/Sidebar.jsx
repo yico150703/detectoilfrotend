@@ -46,6 +46,19 @@ const MENU_ITEMS = [
     label: 'Usuarios', 
     ruta: '/usuarios' 
   },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+        <line x1="9" y1="3" x2="9" y2="21" />
+        <line x1="15" y1="3" x2="15" y2="21" />
+        <line x1="3" y1="9" x2="21" y2="9" />
+        <line x1="3" y1="15" x2="21" y2="15" />
+      </svg>
+    ),
+    label: 'Panel Admin',
+    ruta: '/admin'
+  },
   { 
     icon: (
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -72,7 +85,7 @@ export default function Sidebar({ seccionActiva, isOpen, onClose }) {
 
   const rol = localStorage.getItem('rol') || 'usuario'
   const itemsFiltrados = MENU_ITEMS.filter(item => {
-    if (item.ruta === '/usuarios' && rol !== 'admin') {
+    if ((item.ruta === '/usuarios' || item.ruta === '/admin') && rol !== 'admin') {
       return false
     }
     return true

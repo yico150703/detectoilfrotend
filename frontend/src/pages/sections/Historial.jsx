@@ -267,6 +267,7 @@ export default function Historial() {
                       <th>Área Afectada</th>
                       <th>Fiabilidad IA</th>
                       <th>Nivel Severidad</th>
+                      <th>Protocolo</th>
                       <th>Operador</th>
                       <th style={{ textAlign: 'center', width: '165px', minWidth: '165px' }}>Ficha / Acciones</th>
                     </tr>
@@ -284,6 +285,15 @@ export default function Historial() {
                             <span className={`badge-estado badge-${d.nivel}`}>
                               {d.nivel}
                             </span>
+                          </td>
+                          <td>
+                            {d.protocolo && d.protocolo.estado !== 'no_aplica' ? (
+                              <span className={`badge-estado badge-${d.protocolo.estado === 'pendiente' ? 'alto' : d.protocolo.estado === 'en_curso' ? 'amarillo' : 'verde'}`} style={{ textTransform: 'capitalize', whiteSpace: 'nowrap' }}>
+                                {d.protocolo.estado === 'pendiente' ? '🔴 Pendiente' : d.protocolo.estado === 'en_curso' ? '🟡 En Curso' : '🟢 Mitigado'}
+                              </span>
+                            ) : (
+                              <span style={{ color: 'var(--color-texto-subtle)', fontSize: '0.8rem' }}>No Aplica</span>
+                            )}
                           </td>
                           <td style={{ fontWeight: 600, color: 'var(--color-texto)' }}>@{d.usuario}</td>
                           <td style={{ textAlign: 'center', width: '165px', minWidth: '165px' }}>
@@ -489,8 +499,8 @@ export default function Historial() {
             
             {/* Modal Header */}
             <div style={{ 
-              background: 'rgba(255,255,255,0.02)', 
-              borderBottom: '1px solid rgba(255,255,255,0.06)', 
+              background: 'var(--bg-glass-overlay-light)', 
+              borderBottom: '1px solid var(--border-glass-themed)', 
               padding: '20px 24px',
               display: 'flex', 
               justifyContent: 'space-between', 
@@ -524,7 +534,7 @@ export default function Historial() {
               <div style={{ 
                 borderLeft: `4px solid ${selectedRecord.nivel === 'alto' || selectedRecord.nivel === 'medio' ? 'var(--color-peligro)' : 'var(--color-primario)'}`,
                 paddingLeft: 14,
-                background: 'rgba(255,255,255,0.01)',
+                background: 'var(--bg-glass-overlay-light)',
                 paddingTop: 8,
                 paddingBottom: 8
               }}>
@@ -610,11 +620,44 @@ export default function Historial() {
                 </div>
               )}
 
+              {/* Protocolo de Mitigación (si aplica) */}
+              {selectedRecord.protocolo && selectedRecord.protocolo.estado !== 'no_aplica' && (
+                <div style={{
+                  background: 'var(--bg-glass-overlay-light)',
+                  border: '1px solid var(--border-glass-themed)',
+                  padding: 16,
+                  borderRadius: 12,
+                  marginTop: 4
+                }}>
+                  <h6 style={{ margin: '0 0 8px', color: 'var(--color-texto)', fontSize: '0.9rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    🛡️ Protocolo de Mitigación Activo
+                  </h6>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--color-texto-muted)' }}>Estado:</span>
+                    <span className={`badge-estado badge-${selectedRecord.protocolo.estado === 'pendiente' ? 'alto' : selectedRecord.protocolo.estado === 'en_curso' ? 'amarillo' : 'verde'}`} style={{ textTransform: 'capitalize' }}>
+                      {selectedRecord.protocolo.estado === 'pendiente' ? '🔴 Pendiente' : selectedRecord.protocolo.estado === 'en_curso' ? '🟡 En Curso' : '🟢 Mitigado'}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--color-texto-muted)' }}>Responsable:</span>
+                    <strong style={{ fontSize: '0.8rem', color: 'var(--color-texto)' }}>@{selectedRecord.protocolo.operador}</strong>
+                  </div>
+                  {selectedRecord.protocolo.comentarios && (
+                    <div style={{ marginTop: 8 }}>
+                      <span style={{ fontSize: '0.74rem', color: 'var(--color-texto-muted)', display: 'block', marginBottom: 4 }}>Comentarios de Operación:</span>
+                      <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--color-texto)', background: 'var(--bg-glass-overlay)', padding: 10, borderRadius: 6, fontStyle: 'italic', border: '1px solid var(--border-glass-themed-light)' }}>
+                        "{selectedRecord.protocolo.comentarios}"
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
             </div>
 
             {/* Modal Footer */}
             <div style={{ 
-              background: 'rgba(255,255,255,0.01)', 
+              background: 'var(--bg-glass-overlay-light)', 
               borderTop: '1px solid var(--border-glass)', 
               padding: '16px 24px', 
               display: 'flex', 

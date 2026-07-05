@@ -21,6 +21,24 @@ export default function NuevaDeteccion() {
   const [zona, setZona] = useState('')
   const [error, setError] = useState('')
   const [isDragging, setIsDragging] = useState(false)
+  const [zonasOptions, setZonasOptions] = useState([])
+
+  useEffect(() => {
+    async function cargarZonas() {
+      try {
+        const apiBase = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/+$/, '') : '';
+        const API_URL = apiBase ? `${apiBase}/api` : '/api';
+        const res = await fetch(`${API_URL}/zonas`)
+        const data = await res.json()
+        if (data.success) {
+          setZonasOptions(data.data)
+        }
+      } catch (err) {
+        console.error('Error al cargar zonas de monitoreo:', err)
+      }
+    }
+    cargarZonas()
+  }, [])
   
   const inputRef = useRef(null)
   
@@ -318,7 +336,7 @@ export default function NuevaDeteccion() {
               <div className="row g-2 mb-3">
                 <div className="col-6" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <label className="form-label" style={{ fontSize: '0.74rem' }}>Fecha de Captura</label>
-                  <div style={{ display: 'flex', gap: 4, background: 'rgba(255,255,255,0.03)', padding: 3, borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div style={{ display: 'flex', gap: 4, background: 'var(--bg-glass-overlay)', padding: 3, borderRadius: 8, border: '1px solid var(--border-glass-themed)' }}>
                     <button
                       type="button"
                       onClick={() => {
@@ -371,8 +389,8 @@ export default function NuevaDeteccion() {
                     <div style={{
                       padding: '8px 10px',
                       borderRadius: 8,
-                      background: 'rgba(255,255,255,0.01)',
-                      border: '1px solid rgba(255,255,255,0.03)',
+                      background: 'var(--bg-glass-overlay-light)',
+                      border: '1px solid var(--border-glass-themed-light)',
                       fontSize: '0.76rem',
                       color: 'var(--color-acento)',
                       fontWeight: 700,
@@ -392,10 +410,9 @@ export default function NuevaDeteccion() {
                     style={{ marginBottom: 0, outline: 'none' }}
                   >
                     <option value="">Selecciona...</option>
-                    <option value="Loreto, Perú">Loreto, Perú</option>
-                    <option value="Napo, Ecuador">Napo, Ecuador</option>
-                    <option value="Sucumbíos, Ecuador">Sucumbíos, Ecuador</option>
-                    <option value="Putumayo, Colombia">Putumayo, Colombia</option>
+                    {zonasOptions.map(z => (
+                      <option key={z.id} value={z.nombre}>{z.nombre}</option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -458,7 +475,7 @@ export default function NuevaDeteccion() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20, animation: 'fadeIn 0.5s ease' }}>
                 
                 {/* Diagnóstico Header */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-glass-themed)', paddingBottom: 16 }}>
                   <div>
                     <span style={{ fontSize: '0.74rem', color: 'var(--color-texto-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
                       Resultado del Diagnóstico
@@ -487,7 +504,7 @@ export default function NuevaDeteccion() {
                       cy="60"
                       r="48"
                       fill="transparent"
-                      stroke="rgba(255, 255, 255, 0.04)"
+                      stroke="var(--border-glass-themed-light)"
                       strokeWidth="8"
                     />
                     <circle

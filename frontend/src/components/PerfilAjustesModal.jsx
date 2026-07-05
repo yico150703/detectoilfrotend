@@ -106,8 +106,8 @@ export default function PerfilAjustesModal({ isOpen, onClose, initialTab = 'perf
       >
         {/* Header Tabs */}
         <div style={{
-          background: 'rgba(255, 255, 255, 0.02)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+          background: 'var(--bg-glass-overlay-light)',
+          borderBottom: '1px solid var(--border-glass-themed)',
           padding: '24px 28px 0'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
@@ -253,8 +253,8 @@ export default function PerfilAjustesModal({ isOpen, onClose, initialTab = 'perf
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  background: 'rgba(255, 255, 255, 0.02)',
-                  border: '1px solid var(--border-glass)',
+                  background: 'var(--bg-glass-overlay-light)',
+                  border: '1px solid var(--border-glass-themed)',
                   padding: '12px 18px',
                   borderRadius: 12
                 }}>
@@ -265,8 +265,8 @@ export default function PerfilAjustesModal({ isOpen, onClose, initialTab = 'perf
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  background: 'rgba(255, 255, 255, 0.02)',
-                  border: '1px solid var(--border-glass)',
+                  background: 'var(--bg-glass-overlay-light)',
+                  border: '1px solid var(--border-glass-themed)',
                   padding: '12px 18px',
                   borderRadius: 12
                 }}>
@@ -282,8 +282,8 @@ export default function PerfilAjustesModal({ isOpen, onClose, initialTab = 'perf
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  background: 'rgba(255, 255, 255, 0.02)',
-                  border: '1px solid var(--border-glass)',
+                  background: 'var(--bg-glass-overlay-light)',
+                  border: '1px solid var(--border-glass-themed)',
                   padding: '12px 18px',
                   borderRadius: 12
                 }}>
@@ -431,8 +431,8 @@ export default function PerfilAjustesModal({ isOpen, onClose, initialTab = 'perf
 
         {/* Modal Footer */}
         <div style={{
-          background: 'rgba(255,255,255,0.01)',
-          borderTop: '1px solid var(--border-glass)',
+          background: 'var(--bg-glass-overlay-light)',
+          borderTop: '1px solid var(--border-glass-themed)',
           padding: '18px 28px',
           display: 'flex',
           justifyContent: 'flex-end'
