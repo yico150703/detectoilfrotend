@@ -49,6 +49,11 @@
 - Restablecimiento de contraseñas
 - Visualización de lista de usuarios registrados
 
+### 🛡️ Panel de Control y Mitigación de Emergencias (Nivel Admin)
+- **Gestión de Zonas Críticas (CRUD)**: Administradores pueden añadir, editar y eliminar sectores de monitoreo de cuencas (coordenadas Lat/Lng, supervisor a cargo y nivel de riesgo base).
+- **Planes de Mitigación Activos**: Inserción automática de planes de acción ante derrames (severidad Media/Alta). Permite actualizar bitácoras operacionales e incidentes (Pendiente 🔴, En Curso 🟡, Mitigado 🟢).
+- **Calibración de Satélites**: Controles interactivos para calibrar sensores espectrales y desconectar/conectar telemetría satelital (Sentinel, Landsat, SAOCOM).
+
 ---
 
 ## 🚀 Arquitectura y Stack Tecnológico
@@ -78,7 +83,7 @@ El proyecto está dividido en un esquema moderno de cliente-servidor (**Frontend
 
 ## 💾 Estructura de la Base de Datos
 
-La base de datos PostgreSQL (`historialdb`) cuenta con dos tablas principales autogestionadas al iniciar el servidor:
+La base de datos PostgreSQL (`historialdb`) cuenta con cinco tablas relacionales autogestionadas al iniciar el servidor:
 
 ```mermaid
 erDiagram
@@ -88,6 +93,16 @@ erDiagram
         VARCHAR contrasena
         VARCHAR nombre
         VARCHAR rol
+        TIMESTAMP fecha_registro
+    }
+    zonas_monitoreo {
+        SERIAL id PK
+        VARCHAR nombre UK
+        NUMERIC latitud
+        NUMERIC longitud
+        VARCHAR nivel_riesgo
+        TEXT descripcion
+        VARCHAR encargado
         TIMESTAMP fecha_registro
     }
     historial {
@@ -101,10 +116,30 @@ erDiagram
         NUMERIC probabilidad_derrame
         NUMERIC probabilidad_sin_derrame
         TEXT recomendacion
-        VARCHAR usuario FK
+        VARCHAR usuario
+        INTEGER zona_id FK
         TIMESTAMP fecha_registro
     }
+    alertas_protocolos {
+        SERIAL id PK
+        INTEGER historial_id FK
+        VARCHAR estado
+        TEXT comentarios
+        VARCHAR operador
+        TIMESTAMP fecha_actualizacion
+    }
+    satelites_sensores {
+        SERIAL id PK
+        VARCHAR nombre UK
+        VARCHAR tipo
+        VARCHAR resolucion
+        VARCHAR estado
+        VARCHAR calibracion
+        VARCHAR ultima_pasada
+    }
     usuarios ||--o{ historial : "registra"
+    zonas_monitoreo ||--o{ historial : "monitorea"
+    historial ||--o| alertas_protocolos : "desencadena"
 ```
 
 ---
@@ -177,14 +212,22 @@ cd detectoilfrotend
 | **POST** | `/api/login` | Autenticación y obtención de roles de operador | Público |
 | **GET** | `/api/stats` | Métricas agregadas (alertas, áreas estimadas, promedio de precisión) | Operador / Admin |
 | **GET** | `/api/actividad` | Últimas 5 detecciones registradas para el feed rápido del panel | Operador / Admin |
-| **POST** | `/api/predict` | Carga de imagen espectral para análisis con red neuronal y guardado en BD | Operador / Admin |
-| **GET** | `/api/historial` | Obtención del historial de telemetría guardado | Operador / Admin |
+| **POST** | `/api/predict` | Carga de imagen espectral, inferencia CNN, registro en BD y auto-protocolización | Operador / Admin |
+| **GET** | `/api/historial` | Obtención del historial de telemetría ligado a planes de acción | Operador / Admin |
 | **DELETE** | `/api/historial/<id>` | Eliminación física permanente de un reporte de incidencia | Administrador |
 | **GET** | `/api/usuarios` | Consulta de operadores de red registrados | Administrador |
 | **POST** | `/api/usuarios` | Registro de nuevas credenciales de operadores | Administrador |
 | **DELETE** | `/api/usuarios/<id>` | Baja de un operador (excluyendo a la cuenta 'admin' maestra) | Administrador |
 | **POST** | `/api/usuarios/change-password` | Cambio de contraseña requiriendo clave actual | Operador / Admin |
-| **POST** | `/api/usuarios/reset-password` | Restablecimiento directo de contraseña de un operador sin verificar clave anterior | Administrador |
+| **POST** | `/api/usuarios/reset-password` | Restablecimiento directo de contraseña de un operador | Administrador |
+| **GET** | `/api/zonas` | Obtención de la lista de zonas de monitoreo ambiental | Operador / Admin |
+| **POST** | `/api/zonas` | Creación de una nueva zona geográfica de vigilancia | Administrador |
+| **PUT** | `/api/zonas/<id>` | Actualización de coordenadas, supervisor y riesgo base de la zona | Administrador |
+| **DELETE** | `/api/zonas/<id>` | Eliminación física de una zona de monitoreo | Administrador |
+| **GET** | `/api/satelites` | Obtención de telemetría y estado de sensores satelitales | Operador / Admin |
+| **PUT** | `/api/satelites/<id>` | Cambio de estado de sensor o simulación de calibración | Administrador |
+| **GET** | `/api/protocolos` | Consulta de incidentes y planes de mitigación de emergencia | Operador / Admin |
+| **PUT** | `/api/protocolos/<id>` | Actualización de bitácora técnica y cambio del estado de control | Administrador |
 
 ---
 
