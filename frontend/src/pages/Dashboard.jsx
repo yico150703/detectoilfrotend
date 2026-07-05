@@ -8,6 +8,7 @@ import NuevaDeteccion from './sections/NuevaDeteccion'
 import Historial from './sections/Historial'
 import Informacion from './sections/Informacion'
 import Usuarios from './sections/Usuarios'
+import AdminPanel from './sections/AdminPanel'
 
 // Mapa: nombre de sección → componente React correspondiente
 const SECCIONES = {
@@ -16,6 +17,7 @@ const SECCIONES = {
   historial:       <Historial />,
   usuarios:        <Usuarios />,
   informacion:     <Informacion />,
+  admin:           <AdminPanel />,
 }
 
 export default function Dashboard({ seccion }) {

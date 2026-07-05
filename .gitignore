@@ -1,54 +1,35 @@
-# Examples 1:
+# Dependencies
+node_modules/
+.venv/
+venv/
+env/
 
-    Input:
-    ### Added files:
-    [src/main.py, README.md, config.json]
+# Production builds
+dist/
+build/
 
-    ### Deleted files:
-    [old/unused.py]
-    ### Modified files:
-    [utils.py]
-    ###current .gitignore Content
-    (empty)
-    Expected Output:
-    (empty — output nothing)
+# Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Example 2 (Project with artifacts):
-Input:
-### Added files:
-[pycache/main.cpython-310.pyc, dist/app.js, .env.local, .vscode/settings.json]
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-### Deleted files:
-    []
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
 
-### Modified files:
-[]
-### current .gitignore Content
-*.log
-Expected Output:
-    #Compiled and build artifacts
-    *.pyc
-    pycache/
-    *.o
-    *.obj
-    dist/
-    build/
-    #Dependencies
-    .venv/
-    venv/
-    node_modules/
-    #Logs and temp files
-    *.log
-    *.tmp
-    *.swp
-    #Environment
-    .env
-    .env.local
-    .env.
-    #Editors
-    .vscode/
-    .idea/
-    #Original rules preserved
-    *.log
-
-# Final reminder: Output ONLY the .gitignore content. If nothing should be ignored, output NOTHING.
+# OS files
+.DS_Store
+Thumbs.db

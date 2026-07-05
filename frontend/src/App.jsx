@@ -16,6 +16,12 @@ function ProtectedRoute({ children }) {
   return useAuth() ? children : <Navigate to="/" replace />
 }
 
+// AdminRoute: redirige al inicio si no es administrador
+function AdminRoute({ children }) {
+  const rol = localStorage.getItem('rol') || 'usuario'
+  return useAuth() && rol === 'admin' ? children : <Navigate to="/inicio" replace />
+}
+
 export default function App() {
   return (
     <Routes>
@@ -31,6 +37,7 @@ export default function App() {
       <Route path="/historial"        element={<ProtectedRoute><Dashboard seccion="historial"        /></ProtectedRoute>} />
       <Route path="/usuarios"         element={<ProtectedRoute><Dashboard seccion="usuarios"         /></ProtectedRoute>} />
       <Route path="/informacion"      element={<ProtectedRoute><Dashboard seccion="informacion"      /></ProtectedRoute>} />
+      <Route path="/admin"            element={<AdminRoute><Dashboard seccion="admin"            /></AdminRoute>} />
 
       {/* Cualquier ruta desconocida redirige al inicio */}
       <Route path="*" element={<Navigate to="/" replace />} />
