@@ -219,7 +219,7 @@ init_db()
 # CARGA DEL MODELO ENTRENADO (Lazy Loading)
 # ============================================================
 
-MODEL_PATH = Path("models/detectoil_model.keras")
+MODEL_PATH = Path("models/resnet50_detectoil.keras")
 CLASSES_PATH = Path("models/class_names.json")
 
 model = None
@@ -678,14 +678,17 @@ def predict():
     usuario = request.form.get("usuario", "admin")
 
     try:
-        # Abrimos la imagen, la convertimos a escala de grises y la redimensionamos
-        img = Image.open(file).convert("L")
-        img = img.resize((128, 128))
+        # Abrimos la imagen, la convertimos a RGB y la redimensionamos a 224x224 para ResNet50
+        img = Image.open(file).convert("RGB")
+        img = img.resize((224, 224))
 
-        # Convertimos la imagen a arreglo numérico
-        img_array = np.array(img)
-        img_array = np.expand_dims(img_array, axis=-1)
+        # Convertimos la imagen a arreglo numérico float32
+        img_array = np.array(img, dtype=np.float32)
+        # Expandimos la dimensión del lote (batch) para obtener (1, 224, 224, 3)
         img_array = np.expand_dims(img_array, axis=0)
+
+        # Aplicamos el preprocesamiento específico de ResNet50
+        img_array = tf.keras.applications.resnet.preprocess_input(img_array)
 
         # Predicción del modelo
         prediccion = model.predict(img_array)[0][0]
